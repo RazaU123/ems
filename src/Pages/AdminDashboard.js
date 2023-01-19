@@ -10,9 +10,10 @@ import {
   ExclamationCircleOutlined,
   DownOutlined
 } from '@ant-design/icons';
-import { Card, Col, Row, Statistic, Space, Menu, Dropdown, Tag, Calendar, Popover } from 'antd';
+import { Card, Col, Row, Statistic, Space, Menu, Dropdown, Tag, Calendar, Popover, Table } from 'antd';
 import './AdminDashboard.css'
 import { useQuery } from "react-query";
+import { timeFormater } from "../utils";
 
 function AdminDashboard(props) {
   const navigate = useNavigate()
@@ -79,57 +80,53 @@ function AdminDashboard(props) {
 
   const columns = [
     {
-      title: 'Alert Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Alert Type',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: 'Alert Target',
-      dataIndex: 'target',
-      key: 'target',
-    },
-    {
-      title: 'Sent',
-      dataIndex: 'sent',
-      key: 'sent',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 8 ? 'geekblue' : 'green';
-            if (tag === 'urgent') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
+      title: 'ID',
+      dataIndex: 'key',
+      key: 'key',
+      width: '5%',
+  },
+  {
+      title: 'Developer',
+      dataIndex: 'developerName',
+      key: 'developerName',
+      width: '12%',
+  },
+  {
+      title: 'Manager',
+      dataIndex: 'manager',
+      key: 'manager',
+      width: '12%',
+  },
+  {
+      title: 'Supporting Manager',
+      dataIndex: 'sportingManager',
+      key: 'sportingManager',
+      width: '12%',
+  },
+  {
+      title: 'Meeting Time',
+      key: 'startTimeFormatted',
+      width: '10%',
+      // dataIndex: 'startTime',
+      render: (_, record) => {
+          let time = timeFormater(record.startTime)
+          return time
+      },
+  },
+  {
+      title: 'Actions',
       key: 'action',
       render: (_, record) => (
-        <Space size="middle">
-          <a>Send Email</a>
-          <a>Send SMS</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
+        <Dropdown overlay={menu(items(record))} className="ml-5">
+          <a onClick={e => e.preventDefault()}>
+            <Space>
+              Actions
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      )
+  },
   ];
   const data = [
     {
@@ -237,8 +234,10 @@ function AdminDashboard(props) {
     const listData = getListData(value);
     const showPopUp = popUpVisible.find(item => item.key === value.format('DD/MM/YYYY'))
     const content = (
-      <div>
-        {
+      <div className="" style={{maxWidth: '600px'}}>
+        <Table columns={columns} dataSource={listData}  className="mt-5" />
+        <button onClick={() => togglePopUp(showPopUp?.key)} className="btn btn-xs btn-ghost font-bold">{showPopUp?.open ? 'Close' : '...'}</button>
+        {/* {
           listData.map((item) => (
             <div key={item.key} className="hover:bg-gray-600 hover:text-white p-2 rounded-md" onClick={() => console.log(item)}>
 
@@ -254,7 +253,7 @@ function AdminDashboard(props) {
               </Dropdown>
             </div>
           ))
-        }
+        } */}
       </div>
     )
 
