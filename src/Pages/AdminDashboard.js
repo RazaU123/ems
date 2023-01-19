@@ -265,11 +265,11 @@ function AdminDashboard(props) {
         {listData?.length > 0 && <span className="bg-red-400 p-1 rounded mb-1 text-white">{listData?.length} Meetings</span>}
         {listData?.length > 0 &&
           <li key={listData[0]?.key} className="hover:bg-gray-600 hover:text-white p-2 rounded-md">
-            {listData[0]?.manager} & {listData[0]?.sportingManager} Meeting with {listData[0]?.developerName} @ {listData[0]?.startTimeFormatted}
+            <span className="inline-block">{listData[0]?.manager} & {listData[0]?.sportingManager} Meeting with {listData[0]?.developerName} @ {listData[0]?.startTimeFormatted}</span>
 
             {
               listData.length <= 1 &&
-              <Dropdown overlay={menu(items(listData[0]))} className="ml-5">
+              <Dropdown overlay={menu(items(listData[0]))} className="btn btn-xs btn-outline">
                 <a onClick={e => e.preventDefault()}>
                   <Space>
                     Actions
@@ -287,7 +287,7 @@ function AdminDashboard(props) {
           listData.length > 1 &&
           <div className="flex flex-end justify-center">
             <Popover content={content} title={`All ${value.format('DD, dddd')} Events`} trigger="click" open={showPopUp?.open} />
-            <button onClick={() => togglePopUp(showPopUp?.key)} className="btn btn-xs btn-ghost font-bold">{showPopUp?.open ? 'Close' : '...'}</button>
+            <button onClick={() => togglePopUp(showPopUp?.key)} className="btn btn-xs btn-accent font-bold">{showPopUp?.open ? 'Close' : '...'}</button>
           </div>
         }
 
